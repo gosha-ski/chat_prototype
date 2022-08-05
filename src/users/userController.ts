@@ -1,5 +1,6 @@
 import {Router} from "express"
 import {UserModel} from "./userModel"
+import {authMiddleware} from "../middleware/authMiddleware"
 
 export class UserController{
 	router = Router()
@@ -10,8 +11,8 @@ export class UserController{
 	}
 
 	private initRoutes(){
-		this.router.get(this.path, this.getAllUsers)
-		this.router.get(`${this.path}/:id`, this.getUserById)
+		this.router.get(this.path, authMiddleware, this.getAllUsers)
+		this.router.get(`${this.path}/:id`, authMiddleware, this.getUserById)
 	}
 
 	private getAllUsers = async(request, response)=>{

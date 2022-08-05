@@ -1,6 +1,7 @@
 import {Router} from "express"
 import {UserModel} from "../users/userModel"
 import * as uniqid from "uniqid"
+import * as jwt from "jsonwebtoken"
 
 export class AuthController{
 	router = Router()
@@ -26,6 +27,9 @@ export class AuthController{
 
 			if(user){
 				if(body.password == user.get("password")){
+					console.log(user.get())
+					let token = jwt.sign(user.get(), "key")
+					response.cookie("AuthenticationToken", token)
 					response.send("success sign in")
 				}else{
 					response.send("invalid passsword")
