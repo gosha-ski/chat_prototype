@@ -6,6 +6,7 @@ import * as cookieParser from "cookie-parser"
 import * as bodyParser from "body-parser"
 import * as cors from "cors"
 import {sequelize} from "./sequelize/sequelizeConnection"
+import * as mongoose from "mongoose"
 
 
 export class App{
@@ -19,6 +20,7 @@ export class App{
 	    this.wss = new ws.WebSocketServer({server: this.httpServer, clientTracking: true})
 		this.initMiddleware()
 		this.initDataBasePG()
+		this.initDataBaseMongo()
 		this.initControllers(controllers)
 		this.initWss()
 		this.listen()
@@ -40,6 +42,15 @@ export class App{
 		this.wss.on("connection", ()=>{
 			console.log("new connection")
 		})
+	}
+
+	private async initDataBaseMongo(){
+		try{
+			mongoose.connect("mongodb://localhost:27017/seql_app_db")
+			.then(() => console.log('mongoDB successfully connected'));
+		}catch(error){
+			console.log(error)
+		}
 	}
 
 	private async initDataBasePG(){
