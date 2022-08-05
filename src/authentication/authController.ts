@@ -12,8 +12,18 @@ export class AuthController{
 	}
 
 	private initRoutes(){
+		this.router.get(`${this.path}/login`, this.renderLoginPage)
 		this.router.post(`${this.path}/login`, this.login)
 		this.router.post(`${this.path}/register`, this.register)
+	}
+
+	private renderLoginPage(request, response){
+		try{
+			response.sendFile("/home/gosha/seqlApp/src/public/authentication.html")
+		}catch(error){
+			console.log(error)
+		}
+
 	}
 
 	private login = async(request, response)=>{

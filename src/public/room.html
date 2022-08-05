@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+	<div>
+		<input type="text" id="createIdRoom">
+		<input type="button" value="create room" id="createButton">
+	</div>
+	<div>
+		<input type="text" id="roomId">
+		<input type="button" value="join room" id="changeButton">
+	</div>
+	<div>
+		<input type="text" id="textArea">
+		<input type="button" value="send" id="sendButton">
+	</div>
+	<div>
+		<p>current room</p>
+		<p id="currentroom"></p>
+	</div>
+	<div id="messages">
+		
+	</div>
+	<script type="text/javascript">
+		let currentRoom = document.getElementById("currentRoom")
+		let messages = document.getElementById("messages")
+		let roomId = document.getElementById("roomId")
+		let changeButton = document.getElementById("changeButton")
+		let textArea = document.getElementById("textArea")
+		let sendButton = document.getElementById("sendButton")
+		let createButton = document.getElementById("createButton")
+		let createRoom = document.getElementById("createIdRoom")
+
+		let global_socket  = new WebSocket("ws://localhost:5000/global")
+
+		let socket = new WebSocket("ws://localhost:5000")
+		
+		changeButton.onclick = function(){
+			messages.innerHTML = ""
+			//console.log(document.cookie.split("Authentication="))
+			//socket.close(1000)
+			let room = roomId.value
+			socket = new WebSocket(`ws://localhost:5000/room/${room}`)
+			socket.onmessage = function(event){
+				messages.innerHTML = messages.innerHTML + `<div>${event.data}</div>`
+			}
+		}
+
+		sendButton.onclick = function(){
+			let text = textArea.value
+			socket.send(text)
+		}
+
+		createButton.onclick = async function(){
+			console.log("createButton", createRoom.value)
+			let room = createRoom.value
+			let response = await fetch("http://localhost:5000/room", {
+				method: "POST",
+				headers:{
+					'Content-Type': 'application/json;charset=utf-8'
+				},
+				body: JSON.stringify({name: room})
+			})
+			let result = await response;
+		    console.log(result)
+		    console.log()
+
+		}
+
+	</script>
+
+</body>
+</html>

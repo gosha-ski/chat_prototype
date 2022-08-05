@@ -1,7 +1,7 @@
 import * as ws from "ws"
 import * as http from "http"
 import * as express from "express"
-import {defineWss} from "./wss/defineWss"
+//import {defineWss} from "./wss/defineWss"
 import * as cookieParser from "cookie-parser"
 import * as bodyParser from "body-parser"
 import * as cors from "cors"
