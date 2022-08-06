@@ -11,8 +11,13 @@ export class RoomController{
 	}
 
 	private initRoutes(){
+		this.router.get(`${this.path}/:id`, this.getRoomById)
 		this.router.get(`${this.path}`, this.renderRoom)
 		this.router.post(`${this.path}`, this.createRoom)
+	}
+
+	private getRoomById(request, response){
+		console.log("getRoomById")
 	}
 
 	private renderRoom(request, response){
