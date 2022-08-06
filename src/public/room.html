@@ -35,14 +35,14 @@
 		let createButton = document.getElementById("createButton")
 		let createRoom = document.getElementById("createIdRoom")
 
-		let global_socket  = new WebSocket("ws://localhost:5000/global")
+		let global_socket  = new WebSocket("ws://localhost:5000/GLOBAL")
 
 		let socket = new WebSocket("ws://localhost:5000")
 		
 		changeButton.onclick = function(){
 			messages.innerHTML = ""
 			//console.log(document.cookie.split("Authentication="))
-			//socket.close(1000)
+			socket.close(1000)
 			let room = roomId.value
 			socket = new WebSocket(`ws://localhost:5000/room/${room}`)
 			socket.onmessage = function(event){
