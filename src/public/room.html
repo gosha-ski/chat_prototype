@@ -44,7 +44,7 @@
 			//console.log(document.cookie.split("Authentication="))
 			socket.close(1000)
 			let room = roomId.value
-			socket = new WebSocket(`ws://localhost:5000/room/${room}`)
+			socket = new WebSocket(`ws://localhost:5000/rooms/${room}`)
 			socket.onmessage = function(event){
 				messages.innerHTML = messages.innerHTML + `<div>${event.data}</div>`
 			}
@@ -58,7 +58,7 @@
 		createButton.onclick = async function(){
 			console.log("createButton", createRoom.value)
 			let room = createRoom.value
-			let response = await fetch("http://localhost:5000/room", {
+			let response = await fetch("http://localhost:5000/rooms", {
 				method: "POST",
 				headers:{
 					'Content-Type': 'application/json;charset=utf-8'
