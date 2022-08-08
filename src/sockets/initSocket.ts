@@ -1,4 +1,5 @@
 import {localSocketModel} from "./localSocketModel"
+import {globalConnections} from "../wss/defineWss"
 import {globalSocketModel} from "./globalSocketModel"
 import {localConnections} from "../wss/defineWss"
 import * as uniqid from "uniqid"
@@ -10,7 +11,7 @@ require('dotenv').config();
 
 export async function initSocket(socket, request){
 	try{	
-		console.log(request.url)
+		//console.log(request.url)
 		let jwtToken = request.headers.cookie.split("AuthenticationToken=")[1]
 		let user = jwt.verify(jwtToken, process.env.JWT_KEY)
 		let id = uniqid()
@@ -26,9 +27,10 @@ export async function initSocket(socket, request){
 				type: process.env.GLOBAL_SOCKET_TYPE
 			})
 			await globalSocket.save()
+			globalConnections[id] = socket
 
 		}else if(request.url.split("/")[2]){
-			console.log("localSocket added")
+			//console.log("localSocket added")
 			let roomId = request.url.split("/")[2]
 			initUserRoom(roomId, user, socket, id)
 		}
@@ -44,7 +46,7 @@ async function initUserRoom(roomId, user, socket, socketId){
 
 		let room = (await RoomModel.findAll({where: {id: roomId	}}))[0]
 		if(room){
-			console.log("roomExist")
+			//console.log("roomExist")
 			let roomUser = (await RoomUserModel.findAll({where: {userId: user.id,roomId: roomId}}))[0]
 			if(roomUser){
 				socket.roomId = roomId

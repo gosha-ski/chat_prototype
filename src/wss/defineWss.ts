@@ -15,6 +15,6 @@ export async function defineWss(socket, request){
 }
 
 export let localConnections = {}
-
+export let globalConnections = {}
 
 

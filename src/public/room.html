@@ -6,6 +6,11 @@
 	<title></title>
 </head>
 <body>
+	<div>alerts:</div>
+	<div>
+		<input type="text" id="leaveRoomId">
+		<input type="button" value="leave room" id="leaveRoomButton">
+	</div>
 	<div>
 		<input type="text" id="createIdRoom">
 		<input type="button" value="create room" id="createButton">
@@ -26,6 +31,10 @@
 		
 	</div>
 	<script type="text/javascript">
+
+		//alert("hello")
+		let leaveRoomButton = document.getElementById("leaveRoomButton")
+		let leaveRoomId = document.getElementById("leaveRoomId")
 		let currentRoom = document.getElementById("currentRoom")
 		let messages = document.getElementById("messages")
 		let roomId = document.getElementById("roomId")
@@ -37,7 +46,27 @@
 
 		let global_socket  = new WebSocket("ws://localhost:5000/GLOBAL")
 
+		global_socket.onmessage = function(event){
+			console.log(event.data)
+		}
+
 		let socket = new WebSocket("ws://localhost:5000")
+
+		leaveRoomButton.onclick = async function(){
+			socket.close(1000)
+			let room = leaveRoomId.value
+			console.log(room)
+			let response = fetch("http://localhost:5000/rooms?action=leaveRoom",{
+				method: "POST",
+				headers:{
+					'Content-Type': 'application/json;charset=utf-8'
+				},
+				body: JSON.stringify({roomId: room})
+			})
+			location.reload()
+			//console.log(response)
+			//socket.close(1000)
+		}
 		
 		changeButton.onclick = function(){
 			messages.innerHTML = ""
@@ -45,7 +74,9 @@
 			socket.close(1000)
 			let room = roomId.value
 			socket = new WebSocket(`ws://localhost:5000/rooms/${room}`)
+			console.log(socket.roomId)
 			socket.onmessage = function(event){
+				//console.log(event)
 				messages.innerHTML = messages.innerHTML + `<div>${event.data}</div>`
 			}
 		}
@@ -56,7 +87,7 @@
 		}
 
 		createButton.onclick = async function(){
-			console.log("createButton", createRoom.value)
+			//console.log("createButton", createRoom.value)
 			let room = createRoom.value
 			let response = await fetch("http://localhost:5000/rooms", {
 				method: "POST",
@@ -66,10 +97,12 @@
 				body: JSON.stringify({name: room})
 			})
 			let result = await response;
-		    console.log(result)
-		    console.log()
+		   // console.log(result)
+		    //console.log()
 
 		}
+
+
 
 	</script>
 

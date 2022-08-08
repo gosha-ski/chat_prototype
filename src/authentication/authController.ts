@@ -37,7 +37,7 @@ export class AuthController{
 
 			if(user){
 				if(body.password == user.get("password")){
-					console.log(user.get())
+					//console.log(user.get())
 					let token = jwt.sign(user.get(), "key")
 					response.cookie("AuthenticationToken", token)
 					response.send("success sign in")
