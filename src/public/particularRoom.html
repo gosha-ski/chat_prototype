@@ -32,25 +32,8 @@
 
 
 
-<!-- 	<div id="currentRoomId"><p>current room id: </p></div>
-	<div>
-		<input type="button" value="return back" id="returnButton" href="http://localhost:5000/rooms"> 
-		<a id="returnButton" href="http://localhost:5000/rooms">return back</a>
-	</div>
-	<div>
-		 <input type="text" id="leaveRoomId"> 
-		<input type="button" value="leave room" id="leaveRoomButton">
-	</div>
-	<div>
-		<input type="text" id="textArea">
-		<input type="button" value="send" id="sendButton">
-	</div>
-	<div id="messages"></div> -->
-
-
-
 	<script type="text/javascript">
-		//let audio = new Audio('message_sound.wav')
+		
 
 		let leaveRoomButton = document.getElementById("leaveRoomButton")
 		//let currentRoomId = document.getElementById("currentRoomId")
@@ -59,12 +42,16 @@
 		let sendButton = document.getElementById("sendButton")
 		let rerurnButton = document.getElementById("returnButton")
 
+		let socket = new WebSocket(`ws://localhost:5000${location.pathname}`)
+		let global_socket  = new WebSocket("ws://localhost:5000/GLOBAL")
+
 		let roomId = location.pathname.split("/")[2]
 		console.log(roomId)
 		//currentRoomId.innerHTML = currentRoomId.innerHTML + `<div>${roomId}</div>`
 
 		leaveRoomButton.onclick = function(){
 			socket.close(1000)
+			global_socket.close(1000)
 			// let room = leaveRoomId.value
 			//console.log(room)
 			let response = fetch("http://localhost:5000/rooms?action=leaveRoom",{
@@ -77,13 +64,10 @@
 			location.replace("http://localhost:5000/rooms")
 		}
 
-		let socket = new WebSocket(`ws://localhost:5000${location.pathname}`)
-		let global_socket  = new WebSocket("ws://localhost:5000/GLOBAL")
-
 		global_socket.onmessage = function(event){
-			//console.log(event.data)
-			let audio = new Audio('message_sound.wav')
-			audio.play()
+			console.log(event.data)
+			// let audio = new Audio('message_sound.wav')
+			// audio.play()
 		}
 
 		socket.onmessage = function(event){

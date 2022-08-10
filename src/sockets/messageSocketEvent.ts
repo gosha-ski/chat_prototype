@@ -3,6 +3,7 @@ import {globalConnections} from "../wss/defineWss"
 import {MessageModel} from "../messages/messageModel"
 import {RoomUserModel} from "../rooms/roomUserModel"
 import * as uniqid from "uniqid"
+import {UnreadMessageModel} from "../messages/unreadMessageModel"
 
 export function messageSocketEvent(socket){
 	return async function(data){
@@ -112,6 +113,7 @@ async function notifyRoomSubscribers(socket, data){
 				listForAlert[key] = usersInRoom[key]
 			}
 		}
+		increaseUnreadMessages(listForAlert, socket.roomId)
 
 		for(let key in globalConnections){
 			let userId = globalConnections[key].user.id
@@ -127,4 +129,33 @@ async function notifyRoomSubscribers(socket, data){
 	console.log(error)
 }
 
+}
+
+
+async function increaseUnreadMessages(listForAlert, roomId){
+	try{
+		console.log("____________________________")
+		console.log(listForAlert)
+		for(let id in listForAlert){
+			let user = listForAlert[id]
+			let row = (await UnreadMessageModel.findAll({where:{
+				roomId: roomId,
+				userId: user.userId
+			}}))[0].get()
+
+			console.log(row)
+			// let count = row.unread_messages_count
+			// console.log(count)
+
+			UnreadMessageModel.update({unread_messages_count: row.unread_messages_count+1},{
+				where:{
+					roomId: roomId,
+					userId: user.userId
+				}
+			})
+		}
+
+	}catch(error){
+		console.log(error)
+	}
 }

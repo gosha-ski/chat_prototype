@@ -107,7 +107,7 @@
 		createButton.onclick = async function(){
 			//console.log("createButton", createRoom.value)
 			let room = createRoom.value
-			let response = await fetch("http://localhost:5000/rooms", {
+			let response = await fetch("http://localhost:5000/rooms?action=createRoom", {
 				method: "POST",
 				headers:{
 					'Content-Type': 'application/json;charset=utf-8'

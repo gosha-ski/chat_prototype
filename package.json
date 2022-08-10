@@ -8,7 +8,8 @@
     "server": "ts-node ./src/server.ts",
     "globalSocket": "ts-node ./src/sockets/globalSocketModel.ts",
     "wss": "ts-node ./src/wss/defineWss.ts",
-    "message": "ts-node ./src/messages/messageModel.ts"
+    "message": "ts-node ./src/messages/messageModel.ts",
+    "unread": "ts-node ./src/messages/unreadMessageModel.ts"
   },
   "keywords": [],
   "author": "",

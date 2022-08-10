@@ -6,6 +6,7 @@ import * as uniqid from "uniqid"
 import * as jwt from "jsonwebtoken"
 import {RoomUserModel} from "../rooms/roomUserModel"
 import {RoomModel} from "../rooms/roomModel"
+import {UnreadMessageModel} from "../messages/unreadMessageModel"
 require('dotenv').config();
 
 
@@ -53,11 +54,17 @@ async function initUserRoom(roomId, user, socket, socketId){
 				socket.type = process.env.LOCAL_SOCKET_TYPE
 				localConnections[socketId] = socket
 				console.log("OPEN LOCAL_SOCKET_TYPE")
+				
 			}else{
 				socket.roomId = roomId
 				socket.type = process.env.LOCAL_SOCKET_TYPE
 				localConnections[socketId] = socket
 				await RoomUserModel.create({
+					roomId: roomId,
+					userId: socket.user.id
+				})
+
+				await UnreadMessageModel.create({
 					roomId: roomId,
 					userId: socket.user.id
 				})

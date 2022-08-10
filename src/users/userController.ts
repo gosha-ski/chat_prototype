@@ -2,6 +2,7 @@ import {Router} from "express"
 import {UserModel} from "./userModel"
 import {authMiddleware} from "../middleware/authMiddleware"
 import {RoomUserModel} from "../rooms/roomUserModel"
+import {UnreadMessageModel} from "../messages/unreadMessageModel"
 
 export class UserController{
 	router = Router()
@@ -43,7 +44,24 @@ export class UserController{
 						userId: request.user.id
 					}
 				}))
-				response.send(rooms)
+				for(let i=0; i<rooms.length; i++){
+					let room = rooms[i].get()
+					let unread_messages_count = (await UnreadMessageModel.findAll({
+						where:{
+							roomId: room.roomId,
+							userId: room.userId
+						}
+					}))[0].get().unread_messages_count
+					console.log(unread_messages_count)
+					response.write(`
+						<div class="friend" style="font-family:sans-serif; color: black; font-size:14px; padding: 10px;">
+					    <p>roomID:${room.roomId}| +${unread_messages_count}<p/>
+					    <a href="http://localhost:5000/rooms/${room.roomId}" style="color: black; text-decoration:none; border: 2px solid black; border-radius: 1rem; padding: 8px 14px;"> change</a>
+					    <div>___________________________________</div>
+					    </div>
+						`)
+				}
+				response.end()
 			}
 
 		}catch(error){
