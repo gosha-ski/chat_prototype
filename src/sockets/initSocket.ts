@@ -52,6 +52,7 @@ async function initUserRoom(roomId, user, socket, socketId){
 				socket.roomId = roomId
 				socket.type = process.env.LOCAL_SOCKET_TYPE
 				localConnections[socketId] = socket
+				console.log("OPEN LOCAL_SOCKET_TYPE")
 			}else{
 				socket.roomId = roomId
 				socket.type = process.env.LOCAL_SOCKET_TYPE

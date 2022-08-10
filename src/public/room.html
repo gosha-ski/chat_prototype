@@ -6,6 +6,7 @@
 	<title></title>
 </head>
 <body>
+	
 	<div>alerts:</div>
 	<div>
 		<input type="text" id="leaveRoomId">
@@ -16,33 +17,50 @@
 		<input type="button" value="create room" id="createButton">
 	</div>
 	<div>
+		<input type="text" id="specialRoomId">
+		<input type="button" id="specialChangeButton" value="specialchangeButton">
+	</div>
+	<!-- <div>
 		<input type="text" id="roomId">
 		<input type="button" value="join room" id="changeButton">
-	</div>
-	<div>
+	</div> -->
+	<!-- <div>
 		<input type="text" id="textArea">
 		<input type="button" value="send" id="sendButton">
-	</div>
-	<div>
+	</div> -->
+	<!-- <div>
 		<p>current room</p>
 		<p id="currentroom"></p>
-	</div>
-	<div id="messages">
+	</div> -->
+	<!-- <div id="messages">
 		
-	</div>
+	</div> -->
 	<script type="text/javascript">
 
 		//alert("hello")
+		let specialRoomId = document.getElementById("specialRoomId")
+		let specialChangeButton = document.getElementById("specialChangeButton")
+
 		let leaveRoomButton = document.getElementById("leaveRoomButton")
 		let leaveRoomId = document.getElementById("leaveRoomId")
 		let currentRoom = document.getElementById("currentRoom")
-		let messages = document.getElementById("messages")
-		let roomId = document.getElementById("roomId")
-		let changeButton = document.getElementById("changeButton")
-		let textArea = document.getElementById("textArea")
-		let sendButton = document.getElementById("sendButton")
+		//let messages = document.getElementById("messages")
+		//let roomId = document.getElementById("roomId")
+		//let changeButton = document.getElementById("changeButton")
+		//let textArea = document.getElementById("textArea")
+		//let sendButton = document.getElementById("sendButton")
 		let createButton = document.getElementById("createButton")
 		let createRoom = document.getElementById("createIdRoom")
+
+		specialChangeButton.onclick = async function(){
+			let roomId = specialRoomId.value
+			window.location.replace(`http://localhost:5000/rooms/${roomId}`);
+			//let response = await fetch(`http://localhost:5000/rooms/${roomId}`)
+			//console.log(response)
+		}
+
+
+
 
 		let global_socket  = new WebSocket("ws://localhost:5000/GLOBAL")
 
@@ -68,23 +86,23 @@
 			//socket.close(1000)
 		}
 		
-		changeButton.onclick = function(){
-			messages.innerHTML = ""
-			//console.log(document.cookie.split("Authentication="))
-			socket.close(1000)
-			let room = roomId.value
-			socket = new WebSocket(`ws://localhost:5000/rooms/${room}`)
-			console.log(socket.roomId)
-			socket.onmessage = function(event){
-				//console.log(event)
-				messages.innerHTML = messages.innerHTML + `<div>${event.data}</div>`
-			}
-		}
+		// changeButton.onclick = function(){
+		// 	messages.innerHTML = ""
+		// 	//console.log(document.cookie.split("Authentication="))
+		// 	socket.close(1000)
+		// 	let room = roomId.value
+		// 	socket = new WebSocket(`ws://localhost:5000/rooms/${room}`)
+		// 	console.log(socket.roomId)
+		// 	socket.onmessage = function(event){
+		// 		//console.log(event)
+		// 		messages.innerHTML = messages.innerHTML + `<div>${event.data}</div>`
+		// 	}
+		// }
 
-		sendButton.onclick = function(){
-			let text = textArea.value
-			socket.send(text)
-		}
+		// sendButton.onclick = function(){
+		// 	let text = textArea.value
+		// 	socket.send(text)
+		// }
 
 		createButton.onclick = async function(){
 			//console.log("createButton", createRoom.value)

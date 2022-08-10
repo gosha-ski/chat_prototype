@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="/assets/particularRoom.css">
+</head>
+<body>
+
+
+		<div class="chat__area">
+		<div class="container">
+			<div class="container__inner">
+				<div class="header">
+					<div class="header__inner">
+						<a href="http://localhost:5000/rooms" class="btn">back</a>
+						<p>information</p>
+						<input id="leaveRoomButton" type="button" value="leave room" class="btn">
+					</div>
+
+
+				</div>
+				<div id="messages" class="messages__area"></div>
+				<div class="bottom__input">
+					<input id="textArea" type="text" class="text__area">
+					<input id="sendButton" type="button" value="send" class="btn">
+				</div>
+			</div>			
+		</div>
+	</div>
+
+
+
+<!-- 	<div id="currentRoomId"><p>current room id: </p></div>
+	<div>
+		<input type="button" value="return back" id="returnButton" href="http://localhost:5000/rooms"> 
+		<a id="returnButton" href="http://localhost:5000/rooms">return back</a>
+	</div>
+	<div>
+		 <input type="text" id="leaveRoomId"> 
+		<input type="button" value="leave room" id="leaveRoomButton">
+	</div>
+	<div>
+		<input type="text" id="textArea">
+		<input type="button" value="send" id="sendButton">
+	</div>
+	<div id="messages"></div> -->
+
+
+
+	<script type="text/javascript">
+		//let audio = new Audio('message_sound.wav')
+
+		let leaveRoomButton = document.getElementById("leaveRoomButton")
+		//let currentRoomId = document.getElementById("currentRoomId")
+		let messages = document.getElementById("messages")
+		let textArea = document.getElementById("textArea")
+		let sendButton = document.getElementById("sendButton")
+		let rerurnButton = document.getElementById("returnButton")
+
+		let roomId = location.pathname.split("/")[2]
+		console.log(roomId)
+		//currentRoomId.innerHTML = currentRoomId.innerHTML + `<div>${roomId}</div>`
+
+		leaveRoomButton.onclick = function(){
+			socket.close(1000)
+			// let room = leaveRoomId.value
+			//console.log(room)
+			let response = fetch("http://localhost:5000/rooms?action=leaveRoom",{
+				method: "POST",
+				headers:{
+					'Content-Type': 'application/json;charset=utf-8'
+				},
+				body: JSON.stringify({roomId: roomId})
+			})
+			location.replace("http://localhost:5000/rooms")
+		}
+
+		let socket = new WebSocket(`ws://localhost:5000${location.pathname}`)
+		let global_socket  = new WebSocket("ws://localhost:5000/GLOBAL")
+
+		global_socket.onmessage = function(event){
+			//console.log(event.data)
+			let audio = new Audio('message_sound.wav')
+			audio.play()
+		}
+
+		socket.onmessage = function(event){
+			messages.innerHTML = messages.innerHTML + `<div>${event.data}</div>`
+		}
+
+		sendButton.onclick = function(){
+			let text = textArea.value
+			socket.send(text)
+		}
+
+	</script>
+</body>
+</html>

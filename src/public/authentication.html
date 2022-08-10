@@ -4,9 +4,31 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title></title>
+	<link rel="stylesheet" type="text/css" href="/assets/auth.css">
 </head>
 <body>
-	<div>
+
+	<div class="intro">
+		<div class="container">
+			<div class="input__area">
+				<div class="input__field">
+					<h2>Email</h2>
+					<input id="email" type="email" class="input__data" value="email">
+				</div>				
+				<div class="input__field"> 
+					<h2>Password</h2>
+					<input id="password" type="password" class="input__data" value="password">
+				</div>
+				<div class="btn__container">
+					<input id="login" type="button" value="Sign In" class="btn">
+					<input id="register" type="button" value="Sign Up" class="btn">
+				</div>	
+			</div>
+		</div>
+	</div>
+
+
+	<!-- <div>
 		<input type="text" id="email">
 	</div>
 	<div>
@@ -15,7 +37,7 @@
 	<div>
 		<input type="button" id="login" value="login">
 		<input type="button" id="register" value="register">
-	</div>
+	</div> -->
 	<script type="text/javascript">		
 		let loginButton = document.getElementById("login")
 		let registerButton = document.getElementById("register")

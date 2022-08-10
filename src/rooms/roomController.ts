@@ -18,8 +18,22 @@ export class RoomController{
 		this.router.post(`${this.path}`, authMiddleware, this.createRoom)
 	}
 
-	private getRoomById(request, response){
-		//console.log("getRoomById")
+	private async getRoomById(request, response){
+		try{
+			let roomId = request.params.id
+			console.log("room id is ", roomId)
+			let room = (await RoomModel.findAll({where: {id: roomId	}}))[0]
+			if(room){
+				console.log(room.get())
+				//response.send("<p>hello</p>")
+				response.sendFile("/home/gosha/seqlApp/src/public/particularRoom.html")
+			}else{
+				response.send("room with this id not exist")
+			}
+
+		}catch(error){
+			console.log(error)
+		}
 	}
 
 	private renderRoom(request, response){
