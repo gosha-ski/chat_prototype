@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>#{title}</title>
+    <meta charset="utf-8" />
+    style 
+        include assets/users.css 
+</head>
+<body>
+
+
+        <h3>users</h3>
+        <div class="container">       
+            each user in users
+                <div class="friend">
+                    <div>id: #{user.id}</div>
+                    <div>name: #{user.name}</div>
+                    <a class="btn" href="http://localhost:5000/users/#{user.id}">change</a>
+                </div>
+        </div>
+
+        script
+            include ../src/client/users.ts
+</body>
+<html>

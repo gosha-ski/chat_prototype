@@ -26,6 +26,8 @@ export class App{
 		this.listen()
 	}
 	private initMiddleware(){
+		this.app.set('view engine', 'pug')
+		
 		this.app.use(express.static(__dirname + '/public'));
 		this.app.use(bodyParser.json())
 		this.app.use(cookieParser())

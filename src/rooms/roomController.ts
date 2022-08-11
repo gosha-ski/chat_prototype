@@ -4,6 +4,7 @@ import {RoomUserModel} from "./roomUserModel"
 import {authMiddleware} from "../middleware/authMiddleware"
 import * as uniqid from "uniqid"
 import {localConnections} from "../wss/defineWss"
+import {globalConnections} from "../wss/defineWss"
 import {UnreadMessageModel} from "../messages/unreadMessageModel"
   
 export class RoomController{
@@ -39,6 +40,16 @@ export class RoomController{
 			// console.log("room id is ", roomId)
 			let room = (await RoomModel.findAll({where: {id: roomId	}}))[0]
 			if(room){
+				for(let key in globalConnections){
+					let global_socket = globalConnections[key]
+					if(global_socket.user.id == request.user.id){
+						global_socket.send(JSON.stringify({
+							action: "UPDATE_MESSAGES_COUNT",
+							count: 0,
+							roomId: roomId
+						}))
+					}
+				}
 					UnreadMessageModel.update({unread_messages_count: 0}, {
 					where: {
 						userId: request.user.id,
@@ -57,31 +68,28 @@ export class RoomController{
 
 	private renderRoom = async(request, response)=>{
 		try{
-			response.sendFile("/home/gosha/seqlApp/src/public/room.html")
+			let rooms = (await RoomUserModel.findAll({
+				where: {
+					userId: request.user.id
+				}
+			}))			
+			let listForPug = []
 
-			// let rooms = (await RoomUserModel.findAll({
-			// 	where: {
-			// 		userId: request.user.id
-			// 	}
-			// }))
-			// for(let i=0; i<rooms.length; i++){
-			// 	let room = rooms[i].get()
-			// 	let unread_messages_count = (await UnreadMessageModel.findAll({
-			// 		where:{
-			// 			roomId: room.roomId,
-			// 			userId: room.userId
-			// 		}
-			// 	}))[0].get().unread_messages_count
-			// 	console.log(unread_messages_count)
-			// 	response.write(`
-			// 		<div class="friend" style="font-family:sans-serif; color: black; font-size:14px; padding: 10px;">
-			// 		<p>roomID:${room.roomId}| +${unread_messages_count}<p/>
-			// 		<a href="http://localhost:5000/rooms/${room.roomId}" style="color: black; text-decoration:none; border: 2px solid black; border-radius: 1rem; padding: 8px 14px;"> change</a>
-			// 		<div>___________________________________</div>
-			// 		</div>
-			// 		`)
-			// }
-			// response.end()
+			for(let i=0; i<rooms.length; i++){
+				let room = rooms[i].get()
+				let unread_messages_count = (await UnreadMessageModel.findAll({
+					where:{
+						roomId: room.roomId,
+						userId: room.userId
+					}
+				}))[0].get().unread_messages_count
+				room.unread_messages_count = unread_messages_count
+				listForPug.push(room)
+
+			}
+			response.render('rooms', {
+				rooms: listForPug
+			})
 		}catch(error){
 			console.log(error)
 		}

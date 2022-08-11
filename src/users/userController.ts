@@ -72,17 +72,20 @@ export class UserController{
 	private getAllUsers = async(request, response)=>{
 		try{
 			let users = await UserModel.findAll()
-			for(let i=0; i<users.length; i++){
-				let user = users[i].get()
-				response.write(`
-					<div class="friend" style="font-family:sans-serif; color: black; font-size:14px; padding: 10px;">
-					<p>${user.id}<p/>
-					<a href="http://localhost:5000/users/${user.id}" style="color: black; text-decoration:none; border: 2px solid black; border-radius: 1rem; padding: 8px 14px;"> change</a>
-					</div>`
-				)
+			response.render('users', {
+				users: users
+			})
+			// for(let i=0; i<users.length; i++){
+			// 	let user = users[i].get()
+			// 	response.write(`
+			// 		<div class="friend" style="font-family:sans-serif; color: black; font-size:14px; padding: 10px;">
+			// 		<p>${user.id}<p/>
+			// 		<a href="http://localhost:5000/users/${user.id}" style="color: black; text-decoration:none; border: 2px solid black; border-radius: 1rem; padding: 8px 14px;"> change</a>
+			// 		</div>`
+			// 	)
 
-			}
-			response.end()
+			// }
+			// response.end()
 		}catch(error){
 			console.log(error)
 		}
@@ -90,6 +93,11 @@ export class UserController{
 
 	private getUserById = async(request, response)=>{
 		try{
+			// for(let i=0; i<10; i++){
+			// 	response.render('user', {
+			// 		users: users
+			// 	})
+			// }
 			let id = request.params.id
 			let user = await UserModel.findAll({
 				where:{

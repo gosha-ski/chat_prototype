@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>#{title}</title>
+    <meta charset="utf-8" />
+    style 
+        include assets/rooms.css
+        
+</head>
+<body>
+
+
+        <h3>rooms</h3>
+        <div class="container">       
+            each room in rooms
+                <div class="room">
+                    <div>id: #{room.roomId}</div>
+                    <div id="new_messages_count_#{room.roomId}">#{room.unread_messages_count}</div>
+                    <div id="new_messages_content_#{room.roomId}"></div>
+                    <a class="btn" href="http://localhost:5000/rooms/#{room.roomId}">change</a>
+                </div>
+        </div>
+
+        script
+            include ../src/client/rooms.ts
+</body>
+<html>
