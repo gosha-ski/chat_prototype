@@ -11,7 +11,17 @@
 
 
         <h3>rooms</h3>
-        <div class="container">       
+        <div class="container">
+            <div class="input__area">
+                <input class="input__data" type="text" id="createRoom">
+                <input class="btn" type="button" value="create" id="createButton">
+            </div>
+            <div class="input__area">
+                <input class="input__data" type="text" id="joinRoom">
+                <input class="btn" type="button" value="  join  " id="joinButton">
+            </div>
+
+
             each room in rooms
                 <div class="room">
                     <div>id: #{room.roomId}</div>
