@@ -1,6 +1,7 @@
 import {sequelize} from "../sequelize/sequelizeConnection"
 import {DataTypes} from "sequelize"
 import {UserModel} from "../users/userModel"
+import {RoomModel} from "../rooms/roomModel"
 
 export const MessageModel = sequelize.define("MessageModel", {
 	id: {
@@ -15,12 +16,19 @@ export const MessageModel = sequelize.define("MessageModel", {
 			key: "id"
 		}
 	},
+	roomId: {
+		type: DataTypes.STRING,
+		references: {
+			model: RoomModel,
+			key: "id"
+		}
+	},
 	content: {
 		type: DataTypes.STRING
 	}
 }, {
 	tableName: "messages",
-	timestamps: false
+	// timestamps: false
 })
 
-MessageModel.sync()
+MessageModel.sync({ alter: true })

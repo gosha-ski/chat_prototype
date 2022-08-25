@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>#{roomId}</title>
+    style
+        include assets/particularRoom.css
+
+</head>
+<body>
+    
+    <div class="chat__area">
+        <div class="container">
+            <div class="container__inner">
+                <div class="header">
+                    <div class="header__inner">
+                        <a href="http://localhost:5000/rooms" class="btn">back</a>
+                        <div>
+                            <div>information</div>
+                            <div>id: #{roomId}</div>
+                            <div>name: #{roomName}</div>                            
+                        </div>
+                        <input id="leaveRoomButton" type="button" value="leave room" class="btn">
+                    </div>
+
+
+                </div>
+                <div id="messages" class="messages__area"></div>
+                <div class="bottom__input">
+                    <input id="textArea" type="text" class="text__area">
+                    <input id="sendButton" type="button" value="send" class="btn">
+                </div>
+            </div>          
+        </div>
+    </div>
+    script
+        include ../src/client/particularRoom.ts
+</body>
+</html>

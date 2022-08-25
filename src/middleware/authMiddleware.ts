@@ -12,6 +12,7 @@ export async function authMiddleware(request, response, next){
 		}))[0]
 
 		if(user){
+			request.user = user.get()
 			next()
 		}else{
 			response.send("auth Error")

@@ -2,6 +2,8 @@ import {Router} from "express"
 import {UserModel} from "../users/userModel"
 import * as uniqid from "uniqid"
 import * as jwt from "jsonwebtoken"
+require('dotenv').config();
+
 
 export class AuthController{
 	router = Router()
@@ -37,8 +39,8 @@ export class AuthController{
 
 			if(user){
 				if(body.password == user.get("password")){
-					console.log(user.get())
-					let token = jwt.sign(user.get(), "key")
+					//console.log(user.get())
+					let token = jwt.sign(user.get(), process.env.JWT_KEY)
 					response.cookie("AuthenticationToken", token)
 					response.send("success sign in")
 				}else{
