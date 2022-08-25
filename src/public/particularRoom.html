@@ -71,6 +71,9 @@
 		}
 
 		socket.onmessage = function(event){
+			// console.log(JSON.parse(event.data))
+			// let data = JSON.parse(event.data)
+			///messages.innerHTML = messages.innerHTML + `<div>${data.message.userName}: ${data.message.content}</div>`
 			messages.innerHTML = messages.innerHTML + `<div>${event.data}</div>`
 		}
 

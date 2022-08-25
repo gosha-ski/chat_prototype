@@ -4,6 +4,7 @@ import {MessageModel} from "../messages/messageModel"
 import {RoomUserModel} from "../rooms/roomUserModel"
 import * as uniqid from "uniqid"
 import {UnreadMessageModel} from "../messages/unreadMessageModel"
+import {UserModel} from "../users/userModel"
 
 export function messageSocketEvent(socket){
 	return async function(data){
@@ -31,14 +32,31 @@ async function sendMessage(socket, data){
 
 			for(let key in localConnections){
 				if(localConnections[key].roomId == socket.roomId){
+					let id = uniqid()
 					await MessageModel.create({
-						id: uniqid(),
+						id: id,
 						authorId: socket.user.id,
+						roomId: socket.roomId,
 						content: data.toString()
 					})
-					localConnections[key].send(
-						`${socket.user.name}: ${data.toString()}`
-						)
+					// localConnections[key].send(
+
+					// 	`${socket.user.name}: ${data.toString()}`
+					// 	)
+
+					let userName = (await UserModel.findAll({where:{id: socket.user.id}}))[0].get().name
+
+					let message = {
+						id: id,
+						authorId: socket.user.id,
+						roomId: socket.roomId,
+						content: data.toString(),
+						userName: userName
+					}
+					localConnections[key].send(JSON.stringify({
+						type: `MESSAGE_TO_ROOM`,
+						message: message
+					}))
 				}
 			}
 

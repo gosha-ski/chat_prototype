@@ -56,7 +56,8 @@ export class RoomController{
 						roomId: roomId
 					}
 				})
-				response.sendFile("/home/gosha/seqlApp/src/public/particularRoom.html")
+			    response.render("particularRoom")
+				//response.sendFile("/home/gosha/seqlApp/src/public/particularRoom.html")
 			}else{
 				response.send("room with this id not exist")
 			}
@@ -84,13 +85,13 @@ export class RoomController{
 					}
 				}))[0].get().unread_messages_count
 
-				let experiment = (await UnreadMessageModel.findAll({
-					where:{
-						roomId: room.roomId,
-						userId: room.userId
-					}
-				}))
-				console.log(experiment)
+				// let experiment = (await UnreadMessageModel.findAll({
+				// 	where:{
+				// 		roomId: room.roomId,
+				// 		userId: room.userId
+				// 	}
+				// }))
+				// console.log(experiment)
 
 				room.unread_messages_count = unread_messages_count
 				//room.unread_messages_count = 100000

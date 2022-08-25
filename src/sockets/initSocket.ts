@@ -7,6 +7,8 @@ import * as jwt from "jsonwebtoken"
 import {RoomUserModel} from "../rooms/roomUserModel"
 import {RoomModel} from "../rooms/roomModel"
 import {UnreadMessageModel} from "../messages/unreadMessageModel"
+import {MessageModel} from "../messages/messageModel"
+import {UserModel} from "../users/userModel"
 require('dotenv').config();
 
 
@@ -54,6 +56,7 @@ async function initUserRoom(roomId, user, socket, socketId){
 				socket.type = process.env.LOCAL_SOCKET_TYPE
 				localConnections[socketId] = socket
 				console.log("OPEN LOCAL_SOCKET_TYPE")
+				sendToSocketMessages(socket)
 				
 			}else{
 				socket.roomId = roomId
@@ -72,6 +75,33 @@ async function initUserRoom(roomId, user, socket, socketId){
 
 		}else{
 			console.log("room with this id not exist")
+		}
+
+	}catch(error){
+		console.log(error)
+	}
+}
+
+async function sendToSocketMessages(socket){
+	try{
+		let messages = await MessageModel.findAll({
+			where: {
+				roomId: socket.roomId,
+				authorId: socket.user.id
+			}
+		})
+
+		if(messages[0]){
+			for(let i=0; i<messages.length; i++){
+				let message = messages[i].get()
+				let userName = (await UserModel.findAll({where:{id: message.authorId}}))[0].get().name
+				message.userName = userName
+
+				socket.send(JSON.stringify({
+					type: `MESSAGE_TO_ROOM`,
+					message: message
+				}))
+			}
 		}
 
 	}catch(error){
